@@ -101,8 +101,8 @@ export default function App() {
 
   // Interpolated background color from yellow → green
   const backgroundColor = progressAnim.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: ['rgba(255, 113, 113, 1)', 'rgba(255, 235, 154, 1)', 'rgba(6, 190, 83, 1)'],
+    inputRange: [0, 0.33, 0.66, 1],
+    outputRange: ['rgba(255, 113, 113, 1)', 'rgba(255, 235, 154, 1)', 'rgba(70, 187, 255, 1)', 'rgba(6, 190, 83, 1)'],
   });
 
   const handleSaveGoals = async (newSteps: number, newMinutes: number) => {

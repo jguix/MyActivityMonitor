@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Privacy Policy · MyActivityMonitor</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #0ea5e9;
+      --card: #f8fafc;
+      --border: #e5e7eb;
+    }
+    html, body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; line-height:1.6; }
+    .wrap { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    header { margin-bottom: 24px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    .sub { color: var(--muted); }
+    h2 { font-size: 1.25rem; margin-top: 28px; }
+    section { background: var(--card); padding: 16px 18px; border: 1px solid var(--border); border-radius: 12px; margin: 18px 0; }
+    ul { padding-left: 1.2rem; }
+    code, .mono { font-size: 0.8rem; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    table { width:100%; border-collapse: collapse; margin: 8px 0 0; }
+    th, td { font-size: 0.8rem; text-align:left; border-bottom: 1px solid var(--border); padding: 10px 6px; vertical-align: top; }
+    footer { margin-top: 32px; color: var(--muted); font-size: .9rem; }
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Privacy Policy</h1>
+      <div class="sub">for <strong>MyActivityMonitor</strong></div>
+      <div class="sub">Last updated: October 22, 2025</div>
+    </header>
+
+    <section>
+      <h2>Overview</h2>
+      <p>
+        MyActivityMonitor is a simple application that shows your daily activity using
+        data available on your device. We designed the app to read the minimum
+        necessary information and to process it on the device.
+      </p>
+    </section>
+
+    <section>
+      <h2>Health Connect data we access (Android)</h2>
+      <p>
+        On Android devices that support <strong>Health Connect</strong>, the app requests
+        <em>read-only</em> access to the following record types, solely to display your
+        daily progress inside the app:
+      </p>
+      <table aria-label="Health Connect data types">
+        <thead>
+          <tr>
+            <th>Data type</th>
+            <th>Purpose</th>
+            <th>Scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="mono">StepsRecord</span> (Steps)</td>
+            <td>Calculate and display the total number of steps for the current day.</td>
+            <td>Read-only; aggregated on-device for “today”.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">ExerciseSessionRecord</span> (Exercise sessions)</td>
+            <td>Calculate and display total active minutes for the current day.</td>
+            <td>Read-only; aggregated on-device for “today”.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="note">
+        The app does <strong>not</strong> request write access and does <strong>not</strong>
+        access any other Health Connect data types.
+      </p>
+    </section>
+
+    <section>
+      <h2>How we use your information</h2>
+      <ul>
+        <li>To compute and display your <strong>steps</strong> and <strong>active minutes</strong> for the day.</li>
+        <li>To compare those values against goals that you set in the app.</li>
+      </ul>
+      <p class="note">We do not use your health data for advertising, profiling, or analytics.</p>
+    </section>
+
+    <section>
+      <h2>On‑device processing &amp; data sharing</h2>
+      <p>
+        Health data read through Health Connect is processed <strong>on your device</strong> only.
+        We do not transfer, sell, or share your health data with third parties. The app
+        does not maintain remote servers for health data.
+      </p>
+    </section>
+
+    <section>
+      <h2>Permissions &amp; control</h2>
+      <ul>
+        <li>You can <strong>grant or revoke</strong> Health Connect permissions at any time in the system settings.</li>
+        <li>If permissions are revoked, the app will stop reading those data types and will display zeros or placeholders.</li>
+        <li>You can uninstall the app at any time; the app does not export your health data off-device.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Other data</h2>
+      <p>
+        The app may store your <strong>goal settings</strong> (e.g., steps and minutes targets) locally on the device
+        so they persist across app launches. These settings do not contain health data and are not shared.
+      </p>
+    </section>
+
+    <section>
+      <h2>Data retention</h2>
+      <p>
+        MyActivityMonitor does not retain Health Connect records. Health data is queried from Health Connect when you open
+        or refresh the app and is not stored by the app. Locally stored goal settings remain until you change them or uninstall the app.
+      </p>
+    </section>
+
+    <section>
+      <h2>Security</h2>
+      <p>
+        We rely on the platform security of Android and Health Connect to control access to health data.
+        The app requests the minimum permissions required and uses read-only access.
+      </p>
+    </section>
+
+    <section>
+      <h2>Children’s privacy</h2>
+      <p>
+        MyActivityMonitor is not directed to children under 13. If you believe a child has provided health data
+        through the app, please revoke Health Connect permissions and uninstall the app.
+      </p>
+    </section>
+
+    <section>
+      <h2>Changes to this policy</h2>
+      <p>
+        We may update this policy from time to time. If we make material changes, we will update the
+        “Last updated” date above.
+      </p>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <p>
+        If you have questions about this policy, please contact the developer at
+        <a href="mailto:o3r3.tinc@gmail.com">o3r3.tinc@gmail.com</a>.
+      </p>
+    </section>
+
+    <footer>
+      <p>MyActivityMonitor · Privacy Policy</p>
+    </footer>
+  </div>
+</body>
+</html>

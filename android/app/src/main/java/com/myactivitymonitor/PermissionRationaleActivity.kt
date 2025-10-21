@@ -17,7 +17,7 @@ class PermissionRationaleActivity: AppCompatActivity() {
       }
     }
 
-    webView.loadUrl("https://developer.android.com/health-and-fitness/guides/health-connect/develop/get-started")
+    webView.loadUrl("file:///android_asset/privacy-policy.html")
 
     setContentView(webView)
   }
