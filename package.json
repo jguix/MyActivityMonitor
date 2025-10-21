@@ -10,10 +10,15 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.7",
+    "moment": "^2.27.0",
     "react": "19.1.1",
     "react-native": "0.82.1",
-    "@react-native/new-app-screen": "0.82.1",
-    "react-native-safe-area-context": "^5.5.2"
+    "react-native-health": "mimacom/react-native-health#34f1097",
+    "react-native-health-connect": "mimacom/react-native-health-connect#release",
+    "react-native-logs": "^3.0.3",
+    "react-native-safe-area-context": "^5.5.2",
+    "rxjs": "^6.5.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
