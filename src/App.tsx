@@ -1,22 +1,31 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  StatusBar,
-  Text,
-  View,
+  Animated,
   Button,
-  StyleSheet,
-  useColorScheme,
+  Easing,
   Platform,
+  StatusBar,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
 } from 'react-native';
 import { useHealthToday } from './hooks/useHealthToday';
 import { loadGoals, saveGoals } from './services/storage/storage.service';
 import GoalsModal from './components/goals-modal.component';
-import {
-  SafeAreaProvider,
-} from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const DEFAULT_STEPS_GOAL = 8000;
 const DEFAULT_MINUTES_GOAL = 30;
+
+// Animation helpers
+const animateTo = (val: Animated.Value, to: number, duration = 1200) =>
+  Animated.timing(val, {
+    toValue: to,
+    duration,
+    easing: Easing.out(Easing.cubic),
+    useNativeDriver: true, // we're animating numbers & colors (layout/color), so false
+  });
 
 export default function App() {
   const isDark = useColorScheme() === 'dark';
@@ -26,6 +35,29 @@ export default function App() {
   const [showGoalsModal, setShowGoalsModal] = useState(false);
 
   const { loading, granted, error, steps, minutes, reload } = useHealthToday();
+
+  // Animated values
+  const stepsAnim = useRef(new Animated.Value(0)).current;
+  const minutesAnim = useRef(new Animated.Value(0)).current;
+  const progressAnim = useRef(new Animated.Value(0)).current;
+
+  // Display numbers (rounded) fed by animated values
+  const [stepsDisplay, setStepsDisplay] = useState(0);
+  const [minutesDisplay, setMinutesDisplay] = useState(0);
+
+  // Attach listeners once
+  useEffect(() => {
+    const sId = stepsAnim.addListener(({ value }) =>
+      setStepsDisplay(Math.round(value)),
+    );
+    const mId = minutesAnim.addListener(({ value }) =>
+      setMinutesDisplay(Math.round(value)),
+    );
+    return () => {
+      stepsAnim.removeListener(sId);
+      minutesAnim.removeListener(mId);
+    };
+  }, [stepsAnim, minutesAnim]);
 
   // Load goals from storage on first mount
   useEffect(() => {
@@ -58,17 +90,20 @@ export default function App() {
     return (p1 + p2) / 2;
   }, [steps, minutes, stepsGoal, minutesGoal]);
 
-  const bgColor = useMemo(() => {
-    // simple lerp between #FFE066 (yellow) and #2ECC71 (green)
-    const lerp = (a: number, b: number, t: number) =>
-      Math.round(a + (b - a) * t);
-    const start = { r: 255, g: 224, b: 102 };
-    const end = { r: 46, g: 204, b: 113 };
-    const r = lerp(start.r, end.r, progress);
-    const g = lerp(start.g, end.g, progress);
-    const b = lerp(start.b, end.b, progress);
-    return `rgb(${r}, ${g}, ${b})`;
-  }, [progress]);
+  // Animate when new data or goals change
+  useEffect(() => {
+    // animate numbers from current -> new values
+    animateTo(stepsAnim, steps).start();
+    animateTo(minutesAnim, minutes).start();
+    // animate color/progress 0..1
+    animateTo(progressAnim, progress).start();
+  }, [steps, minutes, progress, stepsAnim, minutesAnim, progressAnim]);
+
+  // Interpolated background color from yellow → green
+  const backgroundColor = progressAnim.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: ['rgba(255, 113, 113, 1)', 'rgba(255, 235, 154, 1)', 'rgba(6, 190, 83, 1)'],
+  });
 
   const handleSaveGoals = async (newSteps: number, newMinutes: number) => {
     setStepsGoal(newSteps);
@@ -78,65 +113,84 @@ export default function App() {
   };
 
   return (
-    <SafeAreaProvider style={[styles.safe, { backgroundColor: bgColor }]}>
-      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
-      <View style={styles.container}>
-        <Text style={styles.h1}>Today</Text>
+    <SafeAreaProvider>
+      <Animated.View style={[styles.safe, { backgroundColor }]}>
+        <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
+        <View style={styles.container}>
+          <Text style={styles.h1}>Today</Text>
 
-        <Text style={styles.metric}>
-          Steps: <Text style={styles.bold}>{loading ? '—' : steps}</Text> /{' '}
-          {stepsGoal}
-        </Text>
+          <View style={styles.display}>
+            <Text style={[styles.value, styles.bold]}>
+              {loading ? '—' : stepsDisplay}
+            </Text>
+            <Text style={styles.goal}>
+              Goal: {stepsGoal}
+            </Text>
+            <Text style={styles.metric}>
+              Steps
+            </Text>
+          </View>
 
-        <Text style={styles.metric}>
-          Activity:{' '}
-          <Text style={styles.bold}>{loading ? '—' : minutes} min</Text> /{' '}
-          {minutesGoal} min
-        </Text>
+          <View style={styles.display}>
+            <Text style={[styles.value, styles.bold]}>
+              {loading ? '—' : minutesDisplay}
+            </Text>
+            <Text style={styles.goal}>
+              Goal: {minutesGoal}
+            </Text>
+            <Text style={styles.metric}>
+              Activity (min)
+            </Text>
+          </View>
 
-        {granted === false && (
-          <Text style={styles.warn}>
-            Permissions not granted.{' '}
-            {Platform.OS === 'android'
-              ? 'Open Health Connect to grant access.'
-              : ''}
+          {granted === false && (
+            <Text style={styles.warn}>
+              Permissions not granted.{' '}
+              {Platform.OS === 'android'
+                ? 'Open Health Connect to grant access.'
+                : ''}
+            </Text>
+          )}
+          {error && <Text style={styles.warn}>Error: {error}</Text>}
+
+          <View style={[styles.row, styles.marginTop]}>
+            <Button title="Refresh" onPress={() => reload(false)} />
+            <View style={{ width: 12 }} />
+            <Button
+              title="Set your goals"
+              onPress={() => setShowGoalsModal(true)}
+            />
+          </View>
+
+          <Text style={styles.note}>
+            We read today’s steps and exercise time to show your activity
+            progress. Goals are saved on this device.
           </Text>
-        )}
-        {error && <Text style={styles.warn}>Error: {error}</Text>}
-
-        <View style={styles.row}>
-          <Button title="Refresh" onPress={() => reload(false)} />
-          <View style={{ width: 12 }} />
-          <Button
-            title="Set your goals"
-            onPress={() => setShowGoalsModal(true)}
-          />
         </View>
 
-        <Text style={styles.note}>
-          We read today’s steps and exercise time to show your activity
-          progress. Goals are saved on this device.
-        </Text>
-      </View>
-
-      <GoalsModal
-        visible={showGoalsModal}
-        initialSteps={stepsGoal}
-        initialMinutes={minutesGoal}
-        onCancel={() => setShowGoalsModal(false)}
-        onSave={handleSaveGoals}
-      />
+        <GoalsModal
+          visible={showGoalsModal}
+          initialSteps={stepsGoal}
+          initialMinutes={minutesGoal}
+          onCancel={() => setShowGoalsModal(false)}
+          onSave={handleSaveGoals}
+        />
+      </Animated.View>
     </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  container: { flex: 1, paddingHorizontal: 20, paddingVertical: 40, gap: 10 },
+  container: { flex: 1, alignItems: "center", paddingHorizontal: 20, paddingVertical: 40, gap: 10 },
+  display: { flex: 0.5, flexDirection: "column", justifyContent: "center", alignItems: "center"},  
   h1: { fontSize: 28, fontWeight: '700' },
-  metric: { fontSize: 18 },
+  metric: { fontSize: 24 },
+  marginTop: { marginTop: 12 },
+  value: { fontSize: 120 },
+  goal: { fontSize: 20 },
   bold: { fontWeight: '700' },
-  row: { flexDirection: 'row', marginTop: 12 },
+  row: { flexDirection: 'row'},
   note: { opacity: 0.7, marginTop: 12 },
   warn: { color: '#a00', marginTop: 8 },
 });
