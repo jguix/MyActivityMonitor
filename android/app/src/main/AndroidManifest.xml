@@ -12,7 +12,6 @@
       android:allowBackup="false"
       android:theme="@style/AppTheme"
       android:usesCleartextTraffic="${usesCleartextTraffic}"
-      android:screenOrientation="portrait"
       android:supportsRtl="true">
       <activity
         android:name=".MainActivity"
@@ -20,7 +19,8 @@
         android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
         android:launchMode="singleTask"
         android:windowSoftInputMode="adjustResize"
-        android:exported="true">
+        android:exported="true"
+        android:screenOrientation="portrait">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
@@ -30,7 +30,8 @@
       <!-- For versions up to Android 13, the intent to open the policy page is enough -->
       <activity
         android:name=".PermissionRationaleActivity"
-        android:exported="true">
+        android:exported="true"
+        android:screenOrientation="portrait">
         <intent-filter>
           <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
           <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
