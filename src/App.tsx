@@ -14,6 +14,7 @@ import { useHealthToday } from './hooks/useHealthToday';
 import { loadGoals, saveGoals } from './services/storage/storage.service';
 import GoalsModal from './components/goals-modal.component';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useIntervalWhenActive } from './hooks/useIntervalWhenActive';
 
 const DEFAULT_STEPS_GOAL = 8000;
 const DEFAULT_MINUTES_GOAL = 30;
@@ -84,6 +85,14 @@ export default function App() {
     reload(true);
   }, [reload]);
 
+    // Poll every 5 seconds while app is in foreground
+  useIntervalWhenActive(() => {
+    // Avoid overlapping fetches
+    if (!loading) {
+      reload(false); // do not re-request permissions
+    }
+  }, 5000);
+
   const progress = useMemo(() => {
     const p1 = Math.min(1, stepsGoal ? steps / stepsGoal : 0);
     const p2 = Math.min(1, minutesGoal ? minutes / minutesGoal : 0);
@@ -99,7 +108,7 @@ export default function App() {
     animateTo(progressAnim, progress).start();
   }, [steps, minutes, progress, stepsAnim, minutesAnim, progressAnim]);
 
-  // Interpolated background color from yellow → green
+  // Interpolated background color from red → green
   const backgroundColor = progressAnim.interpolate({
     inputRange: [0, 0.25, 0.5, 0.75, 1],
     outputRange: [
@@ -127,7 +136,7 @@ export default function App() {
 
           <View style={styles.display}>
             <Text style={[styles.value, styles.bold]}>
-              {loading ? '—' : stepsDisplay}
+              {stepsDisplay}
             </Text>
             <Text style={styles.goal}>Goal: {stepsGoal}</Text>
             <Text style={styles.metric}>Steps</Text>
@@ -135,7 +144,7 @@ export default function App() {
 
           <View style={styles.display}>
             <Text style={[styles.value, styles.bold]}>
-              {loading ? '—' : minutesDisplay}
+              {minutesDisplay}
             </Text>
             <Text style={styles.goal}>Goal: {minutesGoal}</Text>
             <Text style={styles.metric}>Activity (min)</Text>
@@ -152,8 +161,6 @@ export default function App() {
           {error && <Text style={styles.warn}>Error: {error}</Text>}
 
           <View style={[styles.row, styles.marginTop]}>
-            <Button title="Refresh" onPress={() => reload(false)} />
-            <View style={{ width: 12 }} />
             <Button
               title="Set your goals"
               onPress={() => setShowGoalsModal(true)}
