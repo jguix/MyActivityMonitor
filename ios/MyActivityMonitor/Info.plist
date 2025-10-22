@@ -35,6 +35,10 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Read and understand your steps and active minutes data.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Doesn't share any health data with other apps.</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
