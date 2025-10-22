@@ -101,8 +101,14 @@ export default function App() {
 
   // Interpolated background color from yellow → green
   const backgroundColor = progressAnim.interpolate({
-    inputRange: [0, 0.33, 0.66, 1],
-    outputRange: ['rgba(255, 113, 113, 1)', 'rgba(255, 235, 154, 1)', 'rgba(70, 187, 255, 1)', 'rgba(6, 190, 83, 1)'],
+    inputRange: [0, 0.25, 0.5, 0.75, 1],
+    outputRange: [
+      'rgba(243, 81, 81, 1)',
+      'rgba(231, 175, 78, 1)',
+      'rgba(255, 231, 15, 1)',
+      'rgba(201, 255, 23, 1)',
+      'rgba(0, 200, 87, 1)',
+    ],
   });
 
   const handleSaveGoals = async (newSteps: number, newMinutes: number) => {
@@ -123,24 +129,16 @@ export default function App() {
             <Text style={[styles.value, styles.bold]}>
               {loading ? '—' : stepsDisplay}
             </Text>
-            <Text style={styles.goal}>
-              Goal: {stepsGoal}
-            </Text>
-            <Text style={styles.metric}>
-              Steps
-            </Text>
+            <Text style={styles.goal}>Goal: {stepsGoal}</Text>
+            <Text style={styles.metric}>Steps</Text>
           </View>
 
           <View style={styles.display}>
             <Text style={[styles.value, styles.bold]}>
               {loading ? '—' : minutesDisplay}
             </Text>
-            <Text style={styles.goal}>
-              Goal: {minutesGoal}
-            </Text>
-            <Text style={styles.metric}>
-              Activity (min)
-            </Text>
+            <Text style={styles.goal}>Goal: {minutesGoal}</Text>
+            <Text style={styles.metric}>Activity (min)</Text>
           </View>
 
           {granted === false && (
@@ -182,15 +180,27 @@ export default function App() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  container: { flex: 1, alignItems: "center", paddingHorizontal: 20, paddingVertical: 40, gap: 10 },
-  display: { flex: 0.5, flexDirection: "column", justifyContent: "center", alignItems: "center"},  
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 60,
+    paddingBottom: 40,
+    gap: 10,
+  },
+  display: {
+    flex: 0.5,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   h1: { fontSize: 28, fontWeight: '700' },
   metric: { fontSize: 24 },
   marginTop: { marginTop: 12 },
   value: { fontSize: 120 },
   goal: { fontSize: 20 },
   bold: { fontWeight: '700' },
-  row: { flexDirection: 'row'},
-  note: { opacity: 0.7, marginTop: 12 },
+  row: { flexDirection: 'row' },
+  note: { textAlign: "center", opacity: 0.7, marginTop: 12 },
   warn: { color: '#a00', marginTop: 8 },
 });
