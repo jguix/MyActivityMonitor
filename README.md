@@ -1,97 +1,72 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 🏃‍♂️ MyActivityMonitor
 
-# Getting Started
+**MyActivityMonitor** is a minimal React Native demo app that integrates with **Google Health Connect** (and Apple Health) to display your **daily steps** and **active minutes**.  
+Its purpose is to validate the Health Connect permission flow, privacy-safe data handling, and Google Play review process.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## ✨ Features
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- Reads and displays **Steps (StepsRecord)** and **Exercise sessions (ExerciseSessionRecord)** from Health Connect  
+- **Auto-refreshes every 5 seconds** while app is active  
+- Animated progress values and background color based on goal completion  
+- Simple goal setting via modal dialog with persistence on device  
+- Privacy-compliant: no data leaves the device  
+- Matching **app icon** and **splash screen** built around a “walk + target” concept  
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+---
 
-```sh
-# Using npm
-npm start
+## 🧱 Tech stack
 
-# OR using Yarn
-yarn start
+| Platform | Library / Framework |
+|-----------|--------------------|
+| **React Native 0.7x** | base framework |
+| **TypeScript** | app logic |
+| **react-native-health-connect** | Android Health Connect bridge |
+| **react-native-health** | iOS Health Kit bridge (future) |
+| **rxjs** | reactive wrappers for native services |
+| **react-native-safe-area-context** | layout safety |
+| **Animated API** | smooth value transitions |
+| **AsyncStorage** | local goal persistence |
+
+---
+
+## ⚙️ Setup & build
+
+### Install dependencies
+
+   ```bash
+   npm install
+   ```
+
+### Link native modules
+
+```bash
+npx pod-install
 ```
 
-## Step 2: Build and run your app
+### Android SDK setup
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+- minSdkVersion = 26
+- compileSdkVersion = 36
+- Kotlin 2.1.x
+- Java 17+
 
-### Android
+### Run
 
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```bash
+npm run android # android
+npm run ios # ios
 ```
 
-### iOS
+## Permissions
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+The app requests read-only access to:
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
 
-```sh
-bundle install
-```
+| Health Connect record type | Purpose | Access |
+|----------------------------|---------|---------|
+| StepsRecord | Count daily steps | read |
+| StepsRecord | Total active minutes | read |
 
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+---
