@@ -17,6 +17,7 @@ Its purpose is to validate the Health Connect permission flow, privacy-safe data
 ## 📸 Screenshots
 
 | <img src="docs/img/Screenshot_0.png" alt="Screenshot 0" width="150"/> | <img src="docs/img/Screenshot_1.png" alt="Screenshot 1" width="150"/> | <img src="docs/img/Screenshot_2.png" alt="Screenshot 2" width="150"/> | <img src="docs/img/Screenshot_3.png" alt="Screenshot 3" width="150"/> |
+|-----------|-----------|-----------|-----------|
 
 ---
 
